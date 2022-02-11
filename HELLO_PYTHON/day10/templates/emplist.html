@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- <script type = "text/javascript" src ="../static/js/jquery-3.6.0.min.js" ></script> -->
+<!-- <script src="{{url_for('static', filename='jquery-3.6.0.min.js')}}" ></script> -->
+<script src="jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+	function setdata(e_id, e_name, sex, age) {
+		$("#e_id").val(e_id);
+		$("#e_name").val(e_name);
+		$("#sex").val(sex);
+		$("#age").val(age);
+		//console.log(e_id,e_name,sex,age);
+		//var obj_e_id = document.getElementById("e_id");
+		//var obj_e_name = document.getElementById("e_name");
+		//var obj_sex = document.getElementById("sex");
+		//var obj_age = document.getElementById("age");
+
+		//obj_e_id.value = e_id;
+		//obj_e_name.value = e_name;
+		//obj_sex.value = sex;
+		//obj_age.value = age;
+	}
+	function myinsert() {
+		var e_id = $('#e_id').val();
+		var e_name = $('#e_name').val();
+		var sex = $('#sex').val();
+		var age = $('#age').val();
+
+		var postdata = {
+			'e_id' : e_id,
+			'e_name' : e_name,
+			'sex' : sex,
+			'age' : age
+		}
+		$.ajax({
+			type : 'POST',
+			url : 'myinsert',
+			data : JSON.stringify(postdata),
+			dataType : 'JSON',
+			contentType : "application/json",
+			success : function(data) {
+				if (data.result == "success") {
+					alert("정상적으로 추가되었습니다.");
+					location.reload();
+				}
+				console.log(data.result);
+			},
+			error : function(request, status, error) {
+				console.log(request, status, error);
+			}
+		})
+	}
+
+	function myupdate() {
+		var e_id = $('#e_id').val();
+		var e_name = $('#e_name').val();
+		var sex = $('#sex').val();
+		var age = $('#age').val();
+
+		var postdata = {
+			'e_id' : e_id,
+			'e_name' : e_name,
+			'sex' : sex,
+			'age' : age
+		}
+		$.ajax({
+			type : 'POST',
+			url : 'myupdate',
+			data : JSON.stringify(postdata),
+			dataType : 'JSON',
+			contentType : "application/json",
+			success : function(data) {
+				if (data.result == "success") {
+					alert("정상적으로 수정되었습니다.");
+					location.reload();
+				}
+				console.log(data.result);
+			},
+			error : function(request, status, error) {
+				console.log(request, status, error);
+			}
+		})
+	}
+
+	function mydelete() {
+		var flag = confirm("하번 삭제된 데이터는 복구할 수 없습니다. 그래도 삭제하시렵니까?");
+		if(!flag){
+			return;
+		}
+		var e_id = $('#e_id').val();
+
+		var postdata = {
+			'e_id' : e_id
+		}
+		$.ajax({
+			type : 'POST',
+			url : 'mydelete',
+			data : JSON.stringify(postdata),
+			dataType : 'JSON',
+			contentType : "application/json",
+			success : function(data) {
+				if (data.result == "success") {
+					alert("정상적으로 삭제되었습니다.");
+					location.reload();
+				}
+				console.log(data.result);
+			},
+			error : function(request, status, error) {
+				console.log(request, status, error);
+			}
+		})
+	}
+</script>
+</head>
+<body>
+	<table border="1px">
+		<tr>
+			<td>ID</td>
+			<td>이름</td>
+			<td>성별</td>
+			<td>나이</td>
+		</tr>
+		{% for i in emplist %}
+		<tr>
+			<td><a
+				href="javascript:setdata('{{i.e_id}}','{{i.e_name}}','{{i.sex}}','{{i.age}}')">{{i.e_id}}</a></td>
+			<td>{{i.e_name}}</td>
+			<td>{{i.sex}}</td>
+			<td>{{i.age}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	<table border="1px">
+		<tr>
+			<td>아이디</td>
+			<td><input type="text" id="e_id" size="7" /></td>
+		</tr>
+		<tr>
+			<td>이름</td>
+			<td><input type="text" id="e_name" size="7" /></td>
+		</tr>
+		<tr>
+			<td>성별</td>
+			<td><input type="text" id="sex" size="7" /></td>
+		</tr>
+		<tr>
+			<td>나이</td>
+			<td><input type="text" id="age" size="7" /></td>
+		</tr>
+		<tr>
+			<td colspan="2"><input type="button" value="추가"
+				onclick="myinsert()" /> <input type="button" value="수정"
+				onclick="myupdate()" /> <input type="button" value="삭제"
+				onclick="mydelete()" />
+		</tr>
+	</table>
+</body>
+</html>

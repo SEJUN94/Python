@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- <script type = "text/javascript" src ="../static/js/jquery-3.6.0.min.js" ></script> -->
+<script src="{{url_for('static', filename='jquery-3.6.0.min.js')}}" ></script>
+<script type="text/javascript">
+	function setdata(m_id, m_name, tel, addr) {
+		$("#m_id").val(m_id);
+		$("#m_name").val(m_name);
+		$("#tel").val(tel);
+		$("#addr").val(addr);
+	}
+	
+	function myinsert() {
+		var m_name = $('#m_name').val();
+		var tel = $('#tel').val();
+		var addr = $('#addr').val();
+
+		var postdata = {
+			'm_id' : m_id,
+			'm_name' : m_name,
+			'tel' : tel,
+			'addr' : addr
+		}
+		$.ajax({
+			type : 'POST',
+			url : 'myinsert',
+			data : JSON.stringify(postdata),
+			dataType : 'JSON',
+			contentType : "application/json",
+			success : function(data) {
+				if (data.result == "success") {
+					alert("정상적으로 추가되었습니다.");
+					location.reload();
+				}
+				console.log(data.result);
+			},
+			error : function(request, status, error) {
+				console.log(request, status, error);
+			}
+		})
+	}
+
+	function myupdate() {
+		var m_id = $('#m_id').val();
+		var m_name = $('#m_name').val();
+		var tel = $('#tel').val();
+		var addr = $('#addr').val();
+
+		var postdata = {
+			'm_id' : m_id,
+			'm_name' : m_name,
+			'tel' : tel,
+			'addr' : addr
+		}
+		$.ajax({
+			type : 'POST',
+			url : 'myupdate',
+			data : JSON.stringify(postdata),
+			dataType : 'JSON',
+			contentType : "application/json",
+			success : function(data) {
+				if (data.result == "success") {
+					alert("정상적으로 수정되었습니다.");
+					location.reload();
+				}
+				console.log(data.result);
+			},
+			error : function(request, status, error) {
+				console.log(request, status, error);
+			}
+		})
+	}
+
+	function mydelete() {
+		var flag = confirm("하번 삭제된 데이터는 복구할 수 없습니다. 그래도 삭제하시렵니까?");
+		if(!flag){
+			return;
+		}
+		var m_id = $('#m_id').val();
+
+		var postdata = {
+			'm_id' : m_id
+		}
+		$.ajax({
+			type : 'POST',
+			url : 'mydelete',
+			data : JSON.stringify(postdata),
+			dataType : 'JSON',
+			contentType : "application/json",
+			success : function(data) {
+				if (data.result == "success") {
+					alert("정상적으로 삭제되었습니다.");
+					location.reload();
+				}
+				console.log(data.result);
+			},
+			error : function(request, status, error) {
+				console.log(request, status, error);
+			}
+		})
+	}
+</script>
+</head>
+<body>
+	<table border="1px">
+		<tr>
+			<td>ID</td>
+			<td>이름</td>
+			<td>연락처</td>
+			<td>주소</td>
+		</tr>
+		{% for i in memberlist %}
+		<tr>
+			<td><a href="javascript:setdata('{{i.m_id}}','{{i.m_name}}','{{i.tel}}','{{i.addr}}')">{{i.m_id}}</a></td>
+			<td>{{i.m_name}}</td>
+			<td>{{i.tel}}</td>
+			<td>{{i.addr}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	<table border="1px">
+		<tr>
+			<td>아이디</td>
+			<td><input type="text" id="m_id" size="7" /></td>
+		</tr>
+		<tr>
+			<td>이름</td>
+			<td><input type="text" id="m_name" size="7" /></td>
+		</tr>
+		<tr>
+			<td>연락처</td>
+			<td><input type="text" id="tel" size="7" /></td>
+		</tr>
+		<tr>
+			<td>주소</td>
+			<td><input type="text" id="addr" size="7" /></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+			<input type="button" value="추가" onclick="myinsert()" />
+			<input type="button" value="수정" onclick="myupdate()" />
+			<input type="button" value="삭제" onclick="mydelete()" />
+		</tr>
+	</table>
+</body>
+</html>
