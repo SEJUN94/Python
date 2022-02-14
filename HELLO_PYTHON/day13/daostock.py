@@ -58,7 +58,6 @@ class DaoStock1:
         from
             stock
         group by s_name
-        limit 200
         """
         self.curs.execute(sql)
         # 데이터 Fetch
