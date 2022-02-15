@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="Tween.js"></script>
+<script type="text/javascript" src="ColorTween.js"></script>
+<script type="text/javascript" src="OpacityTween.js"></script>
+<script type="text/javascript" src="Sequence.js"></script>
+<script type="text/javascript" src="Parallel.js"></script>
+<script>
+function myclick(){
+
+	var i = document.getElementById("my_img");
+	new Tween(i.style,'left', Tween.regularEaseOut, 0, 500, 1, 'px').start();
+	//var p = new Tween(i.style,'left', Tween.elasticEaseOut, 0, 500, 1, 'px');
+	//													              초
+	//p.start();
+   
+}
+function myserial(){
+	var i = document.getElementById("my_img");
+	var seq = new Sequence();
+	seq.addChild(new Tween(i.style, 'left', Tween.regularEaseOut,0,500, 2,'px'));
+	seq.addChild(new Tween(i.style, 'top', Tween.regularEaseOut,0,500, 2,'px'));
+	seq.start();
+}
+function myparallel(){
+	var i = document.getElementById("my_img");
+	var p = new Parallel();
+	p.addChild(new Tween(i.style, 'left', Tween.regularEaseOut,0,52, 2,'px'));
+	p.addChild(new Tween(i.style, 'top', Tween.regularEaseOut,0,44, 2,'px'));
+	p.start();
+}
+
+
+
+</script>
+</head>
+<body>
+
+<input type="button" value="move"  onclick=" myparallel();"/>
+<img src="images/h_왕.png" id="my_img" style="position: absolute;" title="6,6"/>
+
+</body>
+</html>
