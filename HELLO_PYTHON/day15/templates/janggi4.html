@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script src="jquery-3.6.0.js"></script>
+<script src="jquery-3.6.0.min.js"></script>
 <script src="Tween.js"></script>
 <script src="Sequence.js"></script>
 <script src="Parallel.js"></script>
 <script type="text/javascript">
-
+var flag_end = false; 
 var arr2D = [
 	["h_차", "h_마", "h_상", "h_사", "e", "h_사", "h_상", "h_마", "h_차"],
-	["e", "e", "e", "e", "e", "e", "e", "e", "e"],
+	["e", "e", "e", "e", "h_왕", "e", "e", "e", "e"],
 	["e", "h_포", "e", "e", "e", "e", "e", "h_포", "e"],
-	["h_졸", "e", "h_졸", "e", "e", "e", "h_졸", "e", "h_졸"],
+	["h_졸", "e", "h_졸", "e", "h_졸", "e", "h_졸", "e", "h_졸"],
 	["e", "e", "e", "e", "e", "e", "e", "e", "e"],
-	["b_졸", "e", "e", "e", "h_상", "e", "e", "e", "b_졸"],
-	["b_졸", "e", "e", "e", "e", "e", "e", "e", "h_졸"],
-	["e", "h_포", "b_졸", "e", "e", "b_사", "e", "h_졸", "e"],
 	["e", "e", "e", "e", "e", "e", "e", "e", "e"],
-	["b_차", "b_마", "b_상", "h_사", "e", "h_사", "b_상", "b_마", "b_차"]
+	["b_졸", "e", "b_졸", "e", "b_졸", "e", "b_졸", "e", "b_졸"],
+	["e", "b_포", "e", "e", "e", "e", "e", "b_포", "e"],
+	["e", "e", "e", "e", "b_왕", "e", "e", "e", "e"],
+	["b_차", "b_마", "b_상", "b_사", "e", "b_사", "b_상", "b_마", "b_차"]
 ];
 
 var can2D = [
@@ -131,7 +131,26 @@ function setCan2D(i,j){
 	if(nation=="b" && (mal=="왕" || mal=="사")){
 		b_wangsa(i,j,arr_i,arr_j);
 	}
+	if(nation=="h" && (mal=="왕" || mal=="사")){
+		h_wangsa(i,j,arr_i,arr_j);
+	}
 	
+	
+	if(nation=="b" && mal=="포"){
+		b_po_up(i,j,arr_i,arr_j);
+		b_po_dw(i,j,arr_i,arr_j);
+		b_po_ri(i,j,arr_i,arr_j);
+		b_po_le(i,j,arr_i,arr_j);
+
+	}
+	
+	if(nation=="h" && mal=="포"){
+		h_po_up(i,j,arr_i,arr_j);
+		h_po_dw(i,j,arr_i,arr_j);
+		h_po_ri(i,j,arr_i,arr_j);
+		h_po_le(i,j,arr_i,arr_j);
+
+	}		
 	
 	for(var i=0;i<arr_i.length;i++){
 		var ci = arr_i[i];
@@ -144,17 +163,407 @@ function setCan2D(i,j){
 	console.log(can2D);
 
 }
-function b_wangsa(i,j,arr_i,arr_j){
-	if(i==8 && j==4){
-		b_wangsa_up(i,j,arr_i,arr_j);
-		b_wangsa_ur(i,j,arr_i,arr_j);
-		b_wangsa_ri(i,j,arr_i,arr_j);
-		b_wangsa_dr(i,j,arr_i,arr_j);
-		b_wangsa_dw(i,j,arr_i,arr_j);
-		b_wangsa_dl(i,j,arr_i,arr_j);
-		b_wangsa_le(i,j,arr_i,arr_j);
-		b_wangsa_ul(i,j,arr_i,arr_j);
+
+function h_po_le(i,j,arr_i,arr_j){
+	while(true){
+		j--;
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		if(arr2D[i][j].indexOf("포")>-1){
+			return;
+		}
+		if(arr2D[i][j].indexOf("e")==-1){
+			break;
+		}
 	}
+	
+	while(true){
+		j--;	
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		
+		if(arr2D[i][j].indexOf("h")>-1){
+			return
+		}
+		if(arr2D[i][j].indexOf("포")>-1){
+			return
+		}
+		arr_i.push(i);
+		arr_j.push(j);
+		if(arr2D[i][j].indexOf("b")>-1){
+			return
+		}
+	}
+}
+
+function h_po_ri(i,j,arr_i,arr_j){
+	while(true){
+		j++;
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		if(arr2D[i][j].indexOf("포")>-1){
+			return;
+		}
+		if(arr2D[i][j].indexOf("e")==-1){
+			break;
+		}
+	}
+	
+	while(true){
+		j++;
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		
+		if(arr2D[i][j].indexOf("h")>-1){
+			return
+		}
+		if(arr2D[i][j].indexOf("포")>-1){
+			return
+		}
+		arr_i.push(i);
+		arr_j.push(j);
+		if(arr2D[i][j].indexOf("b")>-1){
+			return
+		}
+	}
+}
+
+function h_po_dw(i,j,arr_i,arr_j){
+	while(true){
+		i++;	
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		if(arr2D[i][j].indexOf("포")>-1){
+			return;
+		}
+		if(arr2D[i][j].indexOf("e")==-1){
+			break;
+		}
+	}
+	
+	while(true){
+		i++;	
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		
+		if(arr2D[i][j].indexOf("h")>-1){
+			return
+		}
+		if(arr2D[i][j].indexOf("포")>-1){
+			return
+		}
+		arr_i.push(i);
+		arr_j.push(j);
+		if(arr2D[i][j].indexOf("b")>-1){
+			return
+		}
+	}
+}
+
+function h_po_up(i,j,arr_i,arr_j){
+	while(true){
+		i--;	
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		if(arr2D[i][j].indexOf("포")>-1){
+			return;
+		}
+		if(arr2D[i][j].indexOf("e")==-1){
+			break;
+		}
+	}
+	
+	while(true){
+		i--;
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		
+		if(arr2D[i][j].indexOf("h")>-1){
+			return
+		}
+		if(arr2D[i][j].indexOf("포")>-1){
+			return
+		}
+		arr_i.push(i);
+		arr_j.push(j);
+		if(arr2D[i][j].indexOf("b")>-1){
+			return
+		}
+	}
+}
+
+
+function b_po_le(i,j,arr_i,arr_j){
+	while(true){
+		j--;
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		if(arr2D[i][j].indexOf("포")>-1){
+			return;
+		}
+		if(arr2D[i][j].indexOf("e")==-1){
+			break;
+		}
+	}
+	
+	while(true){
+		j--;	
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		
+		if(arr2D[i][j].indexOf("b")>-1){
+			return
+		}
+		if(arr2D[i][j].indexOf("포")>-1){
+			return
+		}
+		arr_i.push(i);
+		arr_j.push(j);
+		if(arr2D[i][j].indexOf("h")>-1){
+			return
+		}
+	}
+}
+
+function b_po_ri(i,j,arr_i,arr_j){
+	while(true){
+		j++;
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		if(arr2D[i][j].indexOf("포")>-1){
+			return;
+		}
+		if(arr2D[i][j].indexOf("e")==-1){
+			break;
+		}
+	}
+	
+	while(true){
+		j++;
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		
+		if(arr2D[i][j].indexOf("b")>-1){
+			return
+		}
+		if(arr2D[i][j].indexOf("포")>-1){
+			return
+		}
+		arr_i.push(i);
+		arr_j.push(j);
+		if(arr2D[i][j].indexOf("h")>-1){
+			return
+		}
+	}
+}
+
+function b_po_dw(i,j,arr_i,arr_j){
+	while(true){
+		i++;	
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		if(arr2D[i][j].indexOf("포")>-1){
+			return;
+		}
+		if(arr2D[i][j].indexOf("e")==-1){
+			break;
+		}
+	}
+	
+	while(true){
+		i++;	
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		
+		if(arr2D[i][j].indexOf("b")>-1){
+			return
+		}
+		if(arr2D[i][j].indexOf("포")>-1){
+			return
+		}
+		arr_i.push(i);
+		arr_j.push(j);
+		if(arr2D[i][j].indexOf("h")>-1){
+			return
+		}
+	}
+}
+
+function b_po_up(i,j,arr_i,arr_j){
+	while(true){
+		i--;	
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		if(arr2D[i][j].indexOf("포")>-1){
+			return;
+		}
+		if(arr2D[i][j].indexOf("e")==-1){
+			break;
+		}
+	}
+	
+	while(true){
+		i--;
+		if(i<0 || i>9) return;
+		if(j<0 || j>8) return;
+		
+		if(arr2D[i][j].indexOf("b")>-1){
+			return
+		}
+		if(arr2D[i][j].indexOf("포")>-1){
+			return
+		}
+		arr_i.push(i);
+		arr_j.push(j);
+		if(arr2D[i][j].indexOf("h")>-1){
+			return
+		}
+	}
+}
+
+function h_wangsa(i,j,arr_i,arr_j){
+
+	if(i==0 && j==3){
+		h_wangsa_ri(i,j,arr_i,arr_j);
+		h_wangsa_dr(i,j,arr_i,arr_j);
+		h_wangsa_dw(i,j,arr_i,arr_j);
+	}
+	if(i==0 && j==4){
+		h_wangsa_ri(i,j,arr_i,arr_j);
+		h_wangsa_le(i,j,arr_i,arr_j);
+		h_wangsa_dw(i,j,arr_i,arr_j);
+	}
+	if(i==0 && j==5){
+		h_wangsa_le(i,j,arr_i,arr_j);
+		h_wangsa_dl(i,j,arr_i,arr_j);
+		h_wangsa_dw(i,j,arr_i,arr_j);
+	}	
+	
+	if(i==1 && j==3){
+		h_wangsa_up(i,j,arr_i,arr_j);
+		h_wangsa_dw(i,j,arr_i,arr_j);
+		h_wangsa_ri(i,j,arr_i,arr_j);
+	}
+	if(i==1 && j==4){
+		h_wangsa_up(i,j,arr_i,arr_j);
+		h_wangsa_ur(i,j,arr_i,arr_j);
+		h_wangsa_ri(i,j,arr_i,arr_j);
+		h_wangsa_dr(i,j,arr_i,arr_j);
+		h_wangsa_dw(i,j,arr_i,arr_j);
+		h_wangsa_dl(i,j,arr_i,arr_j);
+		h_wangsa_le(i,j,arr_i,arr_j);
+		h_wangsa_ul(i,j,arr_i,arr_j);
+	}
+	if(i==1 && j==5){
+		h_wangsa_up(i,j,arr_i,arr_j);
+		h_wangsa_dw(i,j,arr_i,arr_j);
+		h_wangsa_le(i,j,arr_i,arr_j);
+	}
+	if(i==2 && j==3){
+		h_wangsa_up(i,j,arr_i,arr_j);
+		h_wangsa_ri(i,j,arr_i,arr_j);
+		h_wangsa_ur(i,j,arr_i,arr_j);
+	}
+	if(i==2 && j==4){
+		h_wangsa_ri(i,j,arr_i,arr_j);
+		h_wangsa_le(i,j,arr_i,arr_j);
+		h_wangsa_up(i,j,arr_i,arr_j);
+	}
+	if(i==2 && j==5){
+		h_wangsa_up(i,j,arr_i,arr_j);
+		h_wangsa_le(i,j,arr_i,arr_j);
+		h_wangsa_ul(i,j,arr_i,arr_j);
+	}
+	
+}
+function h_wangsa_ul(i,j,arr_i,arr_j){
+	j--;
+	i--;
+	if( i<0  || 2<i) return
+	if( j<3  || 5<j) return
+	
+	if(arr2D[i][j].indexOf("h")==-1){
+		arr_i.push(i);
+		arr_j.push(j);
+	}
+}
+function h_wangsa_le(i,j,arr_i,arr_j){
+	j--;
+	if( i<0  || 2<i) return
+	if( j<3  || 5<j) return
+	
+	if(arr2D[i][j].indexOf("h")==-1){
+		arr_i.push(i);
+		arr_j.push(j);
+	}
+}
+function h_wangsa_dl(i,j,arr_i,arr_j){
+	j--;
+	i++;
+	if( i<0  || 2<i) return
+	if( j<3  || 5<j) return
+	
+	if(arr2D[i][j].indexOf("h")==-1){
+		arr_i.push(i);
+		arr_j.push(j);
+	}
+}
+function h_wangsa_dw(i,j,arr_i,arr_j){
+	i++;
+	if( i<0  || 2<i) return
+	if( j<3  || 5<j) return
+	
+	if(arr2D[i][j].indexOf("h")==-1){
+		arr_i.push(i);
+		arr_j.push(j);
+	}
+}
+function h_wangsa_dr(i,j,arr_i,arr_j){
+	i++;
+	j++;
+	if( i<0  || 2<i) return
+	if( j<3  || 5<j) return
+	
+	if(arr2D[i][j].indexOf("h")==-1){
+		arr_i.push(i);
+		arr_j.push(j);
+	}
+}
+function h_wangsa_ri(i,j,arr_i,arr_j){
+	j++;
+	if( i<0  || 2<i) return
+	if( j<3  || 5<j) return
+	
+	if(arr2D[i][j].indexOf("h")==-1){
+		arr_i.push(i);
+		arr_j.push(j);
+	}
+}
+function h_wangsa_ur(i,j,arr_i,arr_j){
+	i--;
+	j++;
+	if( i<0  || 2<i) return
+	if( j<3  || 5<j) return
+	
+	if(arr2D[i][j].indexOf("h")==-1){
+		arr_i.push(i);
+		arr_j.push(j);
+	}
+}
+function h_wangsa_up(i,j,arr_i,arr_j){
+	i--;
+	if( i<0  || 2<i) return
+	if( j<3  || 5<j) return
+	
+	if(arr2D[i][j].indexOf("h")==-1){
+		arr_i.push(i);
+		arr_j.push(j);
+	}
+}
+
+
+function b_wangsa(i,j,arr_i,arr_j){
+
 	if(i==7 && j==3){
 		b_wangsa_ri(i,j,arr_i,arr_j);
 		b_wangsa_dr(i,j,arr_i,arr_j);
@@ -172,8 +581,41 @@ function b_wangsa(i,j,arr_i,arr_j){
 	}	
 	
 	if(i==8 && j==3){
-
+		b_wangsa_up(i,j,arr_i,arr_j);
+		b_wangsa_dw(i,j,arr_i,arr_j);
+		b_wangsa_ri(i,j,arr_i,arr_j);
 	}
+	if(i==8 && j==4){
+		b_wangsa_up(i,j,arr_i,arr_j);
+		b_wangsa_ur(i,j,arr_i,arr_j);
+		b_wangsa_ri(i,j,arr_i,arr_j);
+		b_wangsa_dr(i,j,arr_i,arr_j);
+		b_wangsa_dw(i,j,arr_i,arr_j);
+		b_wangsa_dl(i,j,arr_i,arr_j);
+		b_wangsa_le(i,j,arr_i,arr_j);
+		b_wangsa_ul(i,j,arr_i,arr_j);
+	}
+	if(i==8 && j==5){
+		b_wangsa_up(i,j,arr_i,arr_j);
+		b_wangsa_dw(i,j,arr_i,arr_j);
+		b_wangsa_le(i,j,arr_i,arr_j);
+	}
+	if(i==9 && j==3){
+		b_wangsa_up(i,j,arr_i,arr_j);
+		b_wangsa_ri(i,j,arr_i,arr_j);
+		b_wangsa_ur(i,j,arr_i,arr_j);
+	}
+	if(i==9 && j==4){
+		b_wangsa_ri(i,j,arr_i,arr_j);
+		b_wangsa_le(i,j,arr_i,arr_j);
+		b_wangsa_up(i,j,arr_i,arr_j);
+	}
+	if(i==9 && j==5){
+		b_wangsa_up(i,j,arr_i,arr_j);
+		b_wangsa_le(i,j,arr_i,arr_j);
+		b_wangsa_ul(i,j,arr_i,arr_j);
+	}
+	
 }
 function b_wangsa_ul(i,j,arr_i,arr_j){
 	j--;
@@ -1036,6 +1478,10 @@ function b_zol_ri(i,j,arr_i,arr_j){
 
 
 function myclick(obj){
+	if(flag_end){
+		return;
+	}
+	
 	var status4 = status_idx % 4;
 	var str_ij = obj.title;
 	var arr_ij = str_ij.split(",");
@@ -1076,7 +1522,8 @@ function myclick(obj){
 		
 		var pre_mal =arr2D[pre_int_i][pre_int_j];
 		
-		arr2D[pre_int_i][pre_int_j] = "e"
+		arr2D[pre_int_i][pre_int_j] = "e";
+		var eaten_mal = arr2D[int_i][int_j];
 		arr2D[int_i][int_j] = pre_mal;
 		
 		var pre_x = pre_int_j * 52;
@@ -1098,6 +1545,15 @@ function myclick(obj){
 		
 		myrender();
 		setTimeout(myrender, 100);
+		
+		if(eaten_mal=="h_왕"){
+			setTimeout("alert('초나라가 이겼습니다.')", 102);
+			flag_end = true;
+		}
+		if(eaten_mal=="b_왕"){
+			setTimeout("alert('한나라가 이겼습니다.')", 102);
+			flag_end = true;
+		}
 		
 	}
 	
@@ -1148,6 +1604,40 @@ function myrender(){
 		}
 	}
 }
+function myreset(){
+	flag_end = false; 
+	status_idx = 0;
+	arr2D = [
+		["h_차", "h_마", "h_상", "h_사", "e", "h_사", "h_상", "h_마", "h_차"],
+		["e", "e", "e", "e", "h_왕", "e", "e", "e", "e"],
+		["e", "h_포", "e", "e", "e", "e", "e", "h_포", "e"],
+		["h_졸", "e", "h_졸", "e", "h_졸", "e", "h_졸", "e", "h_졸"],
+		["e", "e", "e", "e", "e", "e", "e", "e", "e"],
+		["e", "e", "e", "e", "e", "e", "e", "e", "e"],
+		["b_졸", "e", "b_졸", "e", "b_졸", "e", "b_졸", "e", "b_졸"],
+		["e", "b_포", "e", "e", "e", "e", "e", "b_포", "e"],
+		["e", "e", "e", "e", "b_왕", "e", "e", "e", "e"],
+		["b_차", "b_마", "b_상", "b_사", "e", "b_사", "b_상", "b_마", "b_차"]
+	];
+
+	can2D = [
+		[0,0,0,0,0, 0,0,0,0],
+		[0,0,0,0,0, 0,0,0,0],
+		[0,0,0,0,0, 0,0,0,0],
+		[0,0,0,0,0, 0,0,0,0],
+		[0,0,0,0,0, 0,0,0,0],
+		
+		[0,0,0,0,0, 0,0,0,0],
+		[0,0,0,0,0, 0,0,0,0],
+		[0,0,0,0,0, 0,0,0,0],
+		[0,0,0,0,0, 0,0,0,0],
+		[0,0,0,0,0, 0,0,0,0]
+	];
+	mycander();
+	myrender();
+	
+
+}
 
 </script>
 </head>
@@ -1161,11 +1651,12 @@ function myrender(){
 <div id="div_mal" style="position: absolute;">
 </div>
 
-
+<div style="position: absolute;left: 480px;">
+	<a href="javascript:myreset()">다시하기</a>
+</div>
 
 </body>
 </html>
-
 
 
 
