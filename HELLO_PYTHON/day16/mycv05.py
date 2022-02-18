@@ -5,7 +5,7 @@ import cv2
 #
 # image.show()
 
-img = cv2.imread("images/iu.jpg",1) # 이미지 불러오기
+img = cv2.imread("images/1.jpg",1) # 이미지 불러오기
 #img = cv2.imread("images/IU1.jpg",1) # 이미지 불러오기
 img180 = cv2.rotate(img, cv2.ROTATE_180)
 height, width, channel = img.shape
